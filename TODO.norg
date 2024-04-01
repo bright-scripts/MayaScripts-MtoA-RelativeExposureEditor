@@ -1,0 +1,44 @@
+@document.meta
+title: TODO
+description: 
+authors: Feline Frequency
+categories: 
+created: 2024-03-29T14:27:10+0000
+updated: 2024-04-01T11:51:27+0000
+version: 1.1.1
+@end
+
+* Open ports in maya:
+  @code python
+  import maya.cmds as cmds
+  # Open new ports
+  cmds.commandPort(name=":7001", sourceType="mel", echoOutput=True)
+  cmds.commandPort(name=":7002", sourceType="python", echoOutput=True)
+  @end
+
+* Pseudo code
+  - (x) get all /visible/ lights
+  - (x) Adjust `exposure` value on all, relatively
+** (-) Read and use user input to do the above👆
+   Arguments:
+   - (-) `value` \<\- how much to change the exposure by
+   -- (x) function
+   -- ( ) {** UI}
+   - (-) `onlyVisible` \<\- only effect visible lights?
+   -- (x) function
+   -- ( ) {** UI}
+   - ( ) `relative` \<\- relative or absolute change?
+   -- ( ) function
+   -- ( ) {** UI}
+   - ( ) `selectedOnly` \<\- only effect selected lights
+   -- ( ) function
+   -- ( ) {** UI}
+
+* Ideas
+** UI
+   - ( ) Open plugin menu with a button
+   - ( ) One input line for `value`
+   - ( ) Checkboxes for:
+   -- `onlyVisible`
+   -- `relative`
+   -- `selectedOnly`
