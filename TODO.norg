@@ -4,7 +4,7 @@ description:
 authors: Feline Frequency
 categories: 
 created: 2024-03-29T14:27:10+0000
-updated: 2024-04-01T11:51:27+0000
+updated: 2024-04-01T15:07:46+0000
 version: 1.1.1
 @end
 
@@ -21,18 +21,22 @@ version: 1.1.1
   - (x) Adjust `exposure` value on all, relatively
 ** (-) Read and use user input to do the above👆
    Arguments:
-   - (-) `value` \<\- how much to change the exposure by
+   - (x) `value` \<\- how much to change the exposure by
    -- (x) function
-   -- ( ) {** UI}
-   - (-) `onlyVisible` \<\- only effect visible lights?
+   -- (x) {** UI}
+   - (x) `onlyVisible` \<\- only effect visible lights?
    -- (x) function
-   -- ( ) {** UI}
-   - ( ) `relative` \<\- relative or absolute change?
+   -- (x) {** UI}
+   - (-) `relative` \<\- relative or absolute change?
    -- ( ) function
-   -- ( ) {** UI}
-   - ( ) `selectedOnly` \<\- only effect selected lights
+   -- (x) {** UI}
+   - (-) `selectedOnly` \<\- only effect selected lights
    -- ( ) function
-   -- ( ) {** UI}
+   -- (x) {** UI}
+   --- *NOTE* This is kinda implemented but selecting things in the outliner only selects their transform attribute, and not their type attribute.
+       To make this work you'll probably have to use regex to make the function find the lights based on this pattern `Transform('directionalLight1asd')` instead of this one `SpotLight('spotLightShape1')`
+   --- Currently you are looking for lights based on the `SpotLight(` part of `SpotLight('spotLightShape1')` as that's their type. 
+       /But.../ you have to `filter= transform` and then regex out the result based on their type attribute (i.e.: the `SpotLight(` part of `SpotLight('spotLightShape1')`)
 
 * Ideas
 ** UI
