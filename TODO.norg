@@ -4,7 +4,7 @@ description:
 authors: Feline Frequency
 categories: 
 created: 2024-03-29T14:27:10+0000
-updated: 2024-04-01T15:07:46+0000
+updated: 2024-04-03T20:49:49+0000
 version: 1.1.1
 @end
 
@@ -28,15 +28,11 @@ version: 1.1.1
    -- (x) function
    -- (x) {** UI}
    - (-) `relative` \<\- relative or absolute change?
-   -- ( ) function
+   -- ( ) function *!!! THIS COMES NEXT !!!*
    -- (x) {** UI}
-   - (-) `selectedOnly` \<\- only effect selected lights
-   -- ( ) function
+   - (x) `selectedOnly` \<\- only effect selected lights
+   -- (x) function
    -- (x) {** UI}
-   --- *NOTE* This is kinda implemented but selecting things in the outliner only selects their transform attribute, and not their type attribute.
-       To make this work you'll probably have to use regex to make the function find the lights based on this pattern `Transform('directionalLight1asd')` instead of this one `SpotLight('spotLightShape1')`
-   --- Currently you are looking for lights based on the `SpotLight(` part of `SpotLight('spotLightShape1')` as that's their type. 
-       /But.../ you have to `filter= transform` and then regex out the result based on their type attribute (i.e.: the `SpotLight(` part of `SpotLight('spotLightShape1')`)
 
 * Ideas
 ** UI
@@ -46,3 +42,59 @@ version: 1.1.1
    -- `onlyVisible`
    -- `relative`
    -- `selectedOnly`
+
+* Helper snippets:
+** Get a list of all objects and their types:
+   @code python
+   #Importing Maya commands 
+   import pymel.core as pymel
+
+   asd = pymel.ls(sn=True, showType=True)
+
+   print(asd)
+
+   if 1 == 1:
+     for x in range(len(asd)-1):
+     print(f"Name: {asd[x]}\n-> Type: {asd[x+1]}")
+   x = x+1
+   @end
+
+** Get list of lights:
+   @code python
+#Importing Maya commands 
+import pymel.core as pymel
+def getLights(includeHidden=False, onlySelected=False):
+  '''
+     Returns a list with two elements:
+     [0]: all Maya lights in the scene
+     [1]: all Arnold lights in the scene
+     Args: 
+     - includeHidden (boolean) -> return hidden lights as well? (false by default)
+     - onlySelected (boolean) -> return only seleceted lights? (false by default)
+
+ '''
+
+ mayaLightTypes = ["areaLight","spotLight","ambientLight","directionalLight","pointLight","volumeLight"]
+ arnoldLightTypes = ["aiSkyDomeLight","aiAreaLight","aiLightPortal","aiPhotometricLight",]
+
+ mayaLights = pymel.ls(type= mayaLightTypes, visible= not includeHidden, selection= onlySelected)
+ arnoldLights = pymel.ls(type= arnoldLightTypes, visible= not includeHidden, selection= onlySelected)
+
+ return [mayaLights, arnoldLights]
+### end of getLights() ###
+print(repr(getLights(userInputs.cbIH, userInputs.cbSO)))
+allLights = getLights(userInputs.cbIH, userInputs.cbSO)
+
+if userInputs.cbSO: # Filter allLights down to only selected lights:
+  pass
+allLights[0] = re.match("V", allLights[0])
+
+
+
+
+for x in allLights[0]: # Set Maya light exposures
+  print(x.name())
+
+for x in allLights[1]: # Set Arnold light exposures
+  print(x.name())
+   @end
