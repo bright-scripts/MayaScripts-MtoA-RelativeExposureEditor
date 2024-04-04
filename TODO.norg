@@ -4,7 +4,7 @@ description:
 authors: Feline Frequency
 categories: 
 created: 2024-03-29T14:27:10+0000
-updated: 2024-04-03T20:49:49+0000
+updated: 2024-04-04T14:27:29+0000
 version: 1.1.1
 @end
 
@@ -16,10 +16,14 @@ version: 1.1.1
   cmds.commandPort(name=":7002", sourceType="python", echoOutput=True)
   @end
 
+* TODO
+  - (x) Finish code based on {* Pseudo code}
+  - ( ) Make code modular in case of new render engines
+
 * Pseudo code
   - (x) get all /visible/ lights
   - (x) Adjust `exposure` value on all, relatively
-** (-) Read and use user input to do the above👆
+** (x) Read and use user input to do the above👆
    Arguments:
    - (x) `value` \<\- how much to change the exposure by
    -- (x) function
@@ -27,8 +31,8 @@ version: 1.1.1
    - (x) `onlyVisible` \<\- only effect visible lights?
    -- (x) function
    -- (x) {** UI}
-   - (-) `relative` \<\- relative or absolute change?
-   -- ( ) function *!!! THIS COMES NEXT !!!*
+   - (x) `relative` \<\- relative or absolute change?
+   -- (x) function
    -- (x) {** UI}
    - (x) `selectedOnly` \<\- only effect selected lights
    -- (x) function

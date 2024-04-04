@@ -1,6 +1,5 @@
 #Importing Maya commands 
 import pymel.core as pymel
-#Importing RegEx, so that we can sort out possible name differences between the original and this file's lights' names
 
 
 def main():
@@ -9,9 +8,9 @@ def main():
 
 # Defining classes #
 class UInputs:
-    def __init__(self, ffV, cbR, cbSO, cbIH):
+    def __init__(self, ffV, cbA, cbSO, cbIH):
         self.ffV = ffV
-        self.cbR = cbR
+        self.cbA = cbA
         self.cbSO = cbSO
         self.cbIH = cbIH
 # End of defining classes #
@@ -38,7 +37,7 @@ def getLights(includeHidden=False, onlySelected=False):
     
     #### Filter allLights down to only selected lights: ####
     if onlySelected:
-        #helpPrintalllLights([mayaLights, arnoldLights], "Before selection")
+        #helpPrintallLights([mayaLights, arnoldLights], "Before selection")
         temp = [[],[]] # An array of the transform names of all lights in the scene
         for x in mayaLights:
             temp[0].append(x.name()[0: x.name().rfind("Shape")]+x.name()[x.name().rfind("Shape")+5:]) # strip "Shape" from the end (but not the nuber if there's one) of the ligth type object's name, then append the result to temp[0]
@@ -60,7 +59,7 @@ def getLights(includeHidden=False, onlySelected=False):
                 arnoldLights.pop(i)
 
 
-        #helpPrintalllLights([mayaLights, arnoldLights], "After selection")
+        #helpPrintallLights([mayaLights, arnoldLights], "After selection")
     #### End of Filter allLights down to only selected lights: ####
 
     return [mayaLights, arnoldLights]
@@ -74,23 +73,25 @@ def getUserInput():
     win = pymel.window(title="Batch Light Editor")
     layout = pymel.columnLayout()
     ffValue = pymel.floatFieldGrp(label="Change value by/to:", parent=layout) # ff stands for "Float Field"
-    cbRelative = pymel.checkBox(label="Override: Absolute change", value=False, parent=layout)
-    cbSelectedOnly = pymel.checkBox(label="Effect selected lights only", value=False, parent=layout)
+    cbAbsolute = pymel.checkBox(label="Override: Absolute change", value=False, parent=layout)
+    cbSelectedOnly = pymel.checkBox(label="Selected lights only", value=False, parent=layout)
     cbIncludeHidden = pymel.checkBox(label="Include hidden lights", value=False, parent=layout)
     btnAccept = pymel.button(label="Accept", parent=layout)
     #### End of Building UI form ####
 
     #### Store User Input ####
     def storeUserInput(*args):
-        userInputs = UInputs(ffV = ffValue.getValue1(), cbR = cbRelative.getValue(), cbSO = cbSelectedOnly.getValue(), cbIH= cbIncludeHidden.getValue() )
+        userInputs = UInputs(ffV = ffValue.getValue1(), cbA = cbAbsolute.getValue(), cbSO = cbSelectedOnly.getValue(), cbIH= cbIncludeHidden.getValue() )
 
+        ##### Processing user inputs #####
         processUserInput(userInputs)
+        ##### End of processing user inputs #####
 
         pymel.deleteUI(win, window=True) # Closing user input window
     #### End of Store User Input ####
 
-    btnAccept.setCommand(storeUserInput)
-    win.show()
+    btnAccept.setCommand(storeUserInput) # Set function to execute on button push
+    win.show() # Open the built window
     return
 ### end of getUserInput() ###
 
@@ -102,14 +103,22 @@ def processUserInput(userInputs):
 
     #### Setting the exposure based on all previous criteria ####
     for x in allLights[0]: # Set Maya light exposures
-        print(x.attr("aiExposure").get())
-        newValue = x.attr("aiExposure").get() + userInputs.ffV
+        print(f"Old value of '{x.name()}': {x.attr('aiExposure').get()}")
+        if userInputs.cbA:
+            newValue = userInputs.ffV
+        else:
+            newValue = x.attr("aiExposure").get() + userInputs.ffV
+
         x.attr("aiExposure").set(newValue)
         print(f'New= {x.attr("aiExposure").get()}')
 
     for x in allLights[1]: # Set Arnold light exposures
-        print(x.attr("exposure").get())
-        newValue = x.attr("exposure").get() + userInputs.ffV
+        print(f"Old value of '{x.name()}': {x.attr('exposure').get()}")
+        if userInputs.cbA:
+            newValue = userInputs.ffV
+        else:
+            newValue = x.attr("exposure").get() + userInputs.ffV
+
         x.attr("exposure").set(newValue)
         print(f'New= {x.attr("exposure").get()}')
     #### End of Setting the exposure based on all previous criteria ####
@@ -117,7 +126,7 @@ def processUserInput(userInputs):
 ### End of processUserInput() ###
 
 # dev helper functions:
-def helpPrintalllLights(allLights, message):
+def helpPrintallLights(allLights, message):
     print("### " + message + " ###")
     for x in allLights[0]: # Set Maya light exposures
       print(x.name())
