@@ -1,7 +1,7 @@
 # MtoA Relative Exposure editor
 
 Have you ever thought "Hmm I like this lighting setup but it's all a bit dim / too bright.."
-You can change the exposure values of Maya default and Arnold lights by a relative ammount so that every light's exposure gets increased/decreased by the same ammount.
+You can change the exposure values of Maya default and Arnold lights by a relative amount so that every light's exposure gets increased/decreased by the same amount.
 
 **By default this option ignores hidden/disabled lights**
 
