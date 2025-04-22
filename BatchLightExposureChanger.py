@@ -37,7 +37,6 @@ def getLights(includeHidden=False, onlySelected=False):
     
     #### Filter allLights down to only selected lights: ####
     if onlySelected:
-        #helpPrintallLights([mayaLights, arnoldLights], "Before selection")
         temp = [[],[]] # An array of the transform names of all lights in the scene
         for x in mayaLights:
             temp[0].append(x.name()[0: x.name().rfind("Shape")]+x.name()[x.name().rfind("Shape")+5:]) # strip "Shape" from the end (but not the nuber if there's one) of the ligth type object's name, then append the result to temp[0]
@@ -47,9 +46,6 @@ def getLights(includeHidden=False, onlySelected=False):
 
         selectedObjects = pymel.ls(selection= True, type= "transform", sn= True)
 
-        #for x in selectedObjects:
-        #    print(f"Selected Item: {x.name()}")
-
         for i in range(len(temp[0])-1, -1, -1):
             if temp[0][i] not in selectedObjects:
                 mayaLights.pop(i)
@@ -58,8 +54,6 @@ def getLights(includeHidden=False, onlySelected=False):
             if temp[1][i] not in selectedObjects:
                 arnoldLights.pop(i)
 
-
-        #helpPrintallLights([mayaLights, arnoldLights], "After selection")
     #### End of Filter allLights down to only selected lights: ####
 
     return [mayaLights, arnoldLights]
@@ -98,8 +92,6 @@ def getUserInput():
 ### ProcessUserInput() ###
 def processUserInput(userInputs):
     allLights = getLights(userInputs.cbIH, userInputs.cbSO)
-    
-    #print(repr(allLights))
 
     #### Setting the exposure based on all previous criteria ####
     for x in allLights[0]: # Set Maya light exposures
